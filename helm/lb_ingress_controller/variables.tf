@@ -17,7 +17,7 @@
  */
 
 variable "public_docker_repo" {}
-variable "image_repo_url" {}
+variable "private_container_repo_url" {}
 variable "image_repo_name" {
   default = "amazon/aws-load-balancer-controller"
 }

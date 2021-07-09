@@ -24,6 +24,11 @@ locals {
   public_subnet_tags  = merge(tomap({"kubernetes.io/cluster/${module.eks-label.id}" = "shared"}), tomap({"kubernetes.io/role/elb" = "1"}), tomap({"created-by" = var.terraform_version}))
 }
 
+locals {
+  service_account_amp_ingest_name = format("%s-%s-%s-%s", var.tenant, var.environment, var.zone, "amp-ingest-account")
+  service_account_amp_query_name = format("%s-%s-%s-%s", var.tenant, var.environment, var.zone, "amp-query-account")
+  amp_workspace_name = format("%s-%s-%s-%s", var.tenant, var.environment, var.zone, "EKS-Metrics-Workspace")
+}
 
 locals {
   image_repo = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/"
@@ -162,6 +167,10 @@ module "vpc_endpoints_gateway" {
   subnet_ids         = module.vpc.private_subnets
 
   endpoints = {
+    aps-workspaces = {
+      service             = "aps-workspaces"
+      private_dns_enabled = true
+    },
     ssm = {
       service             = "ssm"
       private_dns_enabled = true
@@ -248,7 +257,6 @@ module "rbac" {
   zone        = var.zone
 }
 
-
 # ---------------------------------------------------------------------------------------------------------------------
 # EKS CONTROL PLANE AND MANAGED WORKER NODES DEPLOYED BY THIS MODULE
 # ---------------------------------------------------------------------------------------------------------------------
@@ -276,7 +284,8 @@ module "eks" {
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
     "arn:aws:iam::aws:policy/AutoScalingFullAccess",
     "arn:aws:iam::aws:policy/CloudWatchFullAccess",
-    "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"]
+    "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess",
+    "arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess"]
 
   cluster_encryption_config = [
     {
@@ -548,6 +557,24 @@ module "iam" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
+# AWS Managed Prometheus Module
+# ---------------------------------------------------------------------------------------------------------------------
+module "aws_managed_prometheus" {
+  count       = var.aws_managed_prometheus_enable == true ? 1 : 0
+  source      = "../modules/aws_managed_prometheus"
+  environment = var.environment
+  tenant      = var.tenant
+  zone        = var.zone
+  account_id  = data.aws_caller_identity.current.account_id
+  region      = data.aws_region.current.id
+  eks_cluster_id                    = module.eks.cluster_id
+  eks_oidc_provider               = split("//", module.eks.cluster_oidc_issuer_url)[1]
+  service_account_amp_ingest_name = local.service_account_amp_ingest_name
+  service_account_amp_query_name = local.service_account_amp_query_name
+  amp_workspace_name = local.amp_workspace_name
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
 # S3 BUCKET MODULE
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -564,7 +591,7 @@ module "helm" {
   source                            = "../helm"
   eks_cluster_id                    = module.eks.cluster_id
   public_docker_repo                = var.public_docker_repo
-  image_repo_url                    = local.image_repo
+  private_container_repo_url                    = local.image_repo
 
   # ------- Cluster Autoscaler
   cluster_autoscaler_enable         = var.cluster_autoscaler_enable
@@ -600,4 +627,18 @@ module "helm" {
   expose_udp                        = var.expose_udp
   eks_security_group_id             = module.eks.worker_security_group_id
 
+  # ------- Prometheus Module ---------
+  prometheus_enable = var.prometheus_enable
+  alert_manager_image_tag = var.alert_manager_image_tag
+  configmap_reload_image_tag = var.configmap_reload_image_tag
+  node_exporter_image_tag = var.node_exporter_image_tag
+  prometheus_helm_chart_version = var.prometheus_helm_chart_version
+  prometheus_image_tag = var.prometheus_image_tag
+  pushgateway_image_tag = var.pushgateway_image_tag
+  amp_ingest_role_arn = module.aws_managed_prometheus[0].service_account_amp_ingest_role_arn
+  service_account_amp_ingest_name = local.service_account_amp_ingest_name
+  amp_workspace_id = module.aws_managed_prometheus[0].amp_workspace_id
+  region = data.aws_region.current.id
+//  amp_ingest_role_arn = "arn"
+//  amp_workspace_id = "id"
 }

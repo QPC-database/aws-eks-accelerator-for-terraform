@@ -18,7 +18,7 @@
 
 locals {
   public_image_repo = var.public_image_repo
-  image_url         = var.public_docker_repo ? "${local.public_image_repo}/${var.image_repo_name}" : "${var.image_repo_url}${var.image_repo_name}"
+  image_url         = var.public_docker_repo ? "${local.public_image_repo}/${var.image_repo_name}" : "${var.private_container_repo_url}${var.image_repo_name}"
 }
 
 resource "helm_release" "lb-ingress" {

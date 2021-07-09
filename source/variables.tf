@@ -400,3 +400,28 @@ variable "cluster_autoscaler_image_tag" {
 
 variable "cluster_autoscaler_helm_version" {
 }
+
+variable "prometheus_helm_chart_version" {
+}
+variable "prometheus_image_tag" {
+}
+
+variable "alert_manager_image_tag" {
+}
+
+variable "configmap_reload_image_tag" {
+}
+
+variable "node_exporter_image_tag" {
+}
+
+variable "pushgateway_image_tag" {
+}
+
+variable "prometheus_enable" {
+  default = false
+}
+
+variable "aws_managed_prometheus_enable" {
+  default = false
+}

@@ -1,43 +1,50 @@
-# Metrics Server Helm Chart
+# Prometheus Helm Chart
 
-###### Instructions to upload Metrics Server Docker image to AWS ECR
+###### Instructions to upload Prometheus Docker image to AWS ECR
 
 Step1: Get the latest docker image from this link
         
-        https://github.com/kubernetes-sigs/metrics-server
+        https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
         
 Step2: Download the docker image to your local Mac/Laptop
         
-        $ docker pull k8s.gcr.io/metrics-server/metrics-server:v0.4.2
+        $ docker pull quay.io/prometheus/prometheus:v2.26.0
+        $ docker pull quay.io/prometheus/alertmanager:v0.21.0
+        $ docker pull jimmidyson/configmap-reload:v0.5.0
+        $ docker pull quay.io/prometheus/node-exporter:v1.1.2
+        $ docker pull prom/pushgateway:v1.3.1
+        
         
 Step3: Retrieve an authentication token and authenticate your Docker client to your registry. Use the AWS CLI:
         
         $ aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin <account id>.dkr.ecr.eu-west-1.amazonaws.com
         
-Step4: Create an ECR repo for Metrics Server if you don't have one 
+Step4: Create an ECR repo for each image mentioned in Step2 with the same in ECR. See example for 
     
         $ aws ecr create-repository \
-              --repository-name k8s.gcr.io/metrics-server/metrics-server \
+              --repository-name quay.io/prometheus/prometheus \
               --image-scanning-configuration scanOnPush=true 
+        
+Repeat the above steps for other 4 images
               
 Step5: After the build completes, tag your image so, you can push the image to this repository:
         
-        $ docker tag k8s.gcr.io/metrics-server/metrics-server:v0.4.2 <accountid>.dkr.ecr.eu-west-1.amazonaws.com/k8s.gcr.io/metrics-server/metrics-server:v0.4.2
+        $ docker tag quay.io/prometheus/prometheus:v2.26.0 <accountid>.dkr.ecr.eu-west-1.amazonaws.com/quay.io/prometheus/prometheus:v2.26.0
+
+Repeat the above steps for other 4 images
         
 Step6: Run the following command to push this image to your newly created AWS repository:
         
-        $ docker push <accountid>.dkr.ecr.eu-west-1.amazonaws.com/k8s.gcr.io/metrics-server/metrics-server:v0.4.2
+        $ docker push <accountid>.dkr.ecr.eu-west-1.amazonaws.com/quay.io/prometheus/prometheus:v2.26.0
+
+Repeat the above steps for other 4 images
 
 ### Instructions to download Helm Charts
 
 Helm Chart
     
-    https://artifacthub.io/packages/helm/appuio/metrics-server
+    https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
 
-Helm Repo Maintainers
-
-    https://charts.appuio.ch
-    
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.

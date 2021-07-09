@@ -86,7 +86,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_eks_cluster_id"></a> [eks\_cluster\_id](#input\_eks\_cluster\_id) | EKS\_Cluster\_ID | `any` | n/a | yes |
 | <a name="input_image_repo_name"></a> [image\_repo\_name](#input\_image\_repo\_name) | n/a | `string` | `"k8s.gcr.io/autoscaling/cluster-autoscaler"` | no |
-| <a name="input_image_repo_url"></a> [image\_repo\_url](#input\_image\_repo\_url) | n/a | `any` | n/a | yes |
+| <a name="input_private_container_repo_url"></a> [image\_repo\_url](#input\_image\_repo\_url) | n/a | `any` | n/a | yes |
 | <a name="input_image_tag"></a> [image\_tag](#input\_image\_tag) | n/a | `string` | `"v1.19.1"` | no |
 | <a name="input_public_docker_repo"></a> [public\_docker\_repo](#input\_public\_docker\_repo) | n/a | `any` | n/a | yes |
 

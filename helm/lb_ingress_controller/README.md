@@ -110,7 +110,7 @@ No modules.
 | <a name="input_eks_oidc_issuer_url"></a> [eks\_oidc\_issuer\_url](#input\_eks\_oidc\_issuer\_url) | n/a | `any` | n/a | yes |
 | <a name="input_eks_oidc_provider_arn"></a> [eks\_oidc\_provider\_arn](#input\_eks\_oidc\_provider\_arn) | n/a | `any` | n/a | yes |
 | <a name="input_image_repo_name"></a> [image\_repo\_name](#input\_image\_repo\_name) | n/a | `string` | `"amazon/aws-load-balancer-controller"` | no |
-| <a name="input_image_repo_url"></a> [image\_repo\_url](#input\_image\_repo\_url) | n/a | `any` | n/a | yes |
+| <a name="input_private_container_repo_url"></a> [image\_repo\_url](#input\_image\_repo\_url) | n/a | `any` | n/a | yes |
 | <a name="input_image_tag"></a> [image\_tag](#input\_image\_tag) | n/a | `string` | `"v2.1.3"` | no |
 | <a name="input_public_docker_repo"></a> [public\_docker\_repo](#input\_public\_docker\_repo) | n/a | `any` | n/a | yes |
 | <a name="input_replicas"></a> [replicas](#input\_replicas) | n/a | `string` | `"2"` | no |

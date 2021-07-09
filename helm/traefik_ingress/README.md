@@ -106,7 +106,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | n/a | `any` | n/a | yes |
 | <a name="input_image_repo_name"></a> [image\_repo\_name](#input\_image\_repo\_name) | n/a | `string` | `"traefik"` | no |
-| <a name="input_image_repo_url"></a> [image\_repo\_url](#input\_image\_repo\_url) | n/a | `any` | n/a | yes |
+| <a name="input_private_container_repo_url"></a> [image\_repo\_url](#input\_image\_repo\_url) | n/a | `any` | n/a | yes |
 | <a name="input_image_tag"></a> [image\_tag](#input\_image\_tag) | n/a | `string` | `"v2.4.8"` | no |
 | <a name="input_public_docker_repo"></a> [public\_docker\_repo](#input\_public\_docker\_repo) | variable "tls\_cert\_arn" {} | `any` | n/a | yes |
 | <a name="input_s3_nlb_logs"></a> [s3\_nlb\_logs](#input\_s3\_nlb\_logs) | n/a | `any` | n/a | yes |

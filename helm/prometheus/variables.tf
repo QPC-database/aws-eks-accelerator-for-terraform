@@ -16,29 +16,62 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-//gcr.io/agones-images/agones-controller:1.15.0-rc
+
+variable "amp_workspace_id" {}
+variable "region" {}
+variable "amp_ingest_role_arn" {}
 
 variable "private_container_repo_url" {}
-variable "image_repo_name" {
-  default = "gcr.io/agones-images"
-}
-variable "image_tag" {
-  default = "1.15.0"
-}
-variable "cluster_id" {}
 
-variable "eks_sg_id" {}
+variable "service_account_amp_ingest_name" {
+}
+variable "prometheus_enable" {
+  type        = bool
+  default     = false
+  description = "Enabling prometheus on eks cluster"
+}
+
+variable "prometheus_helm_chart_version" {
+  default = "14.3.1"
+}
+variable "prometheus_repo" {
+  default = "quay.io/prometheus/prometheus"
+}
+
+variable "prometheus_image_tag" {
+  default = "v2.26.0"
+}
+
+variable "alert_manager_repo" {
+  default = "quay.io/prometheus/alertmanager"
+}
+
+variable "alert_manager_image_tag" {
+  default = "v0.21.0"
+}
+
+variable "configmap_reload_repo" {
+  default = "jimmidyson/configmap-reload"
+}
+
+variable "configmap_reload_image_tag" {
+  default = "v0.5.0"
+}
+
+variable "node_exporter_repo" {
+  default = "quay.io/prometheus/node-exporter"
+}
+
+variable "node_exporter_image_tag" {
+  default = "v1.1.2"
+}
+
+variable "pushgateway_repo" {
+  default = "prom/pushgateway"
+}
+
+variable "pushgateway_image_tag" {
+  default = "v1.3.1"
+}
 
 variable "public_docker_repo" {}
-
-variable "s3_nlb_logs" {}
-
-variable "expose_udp" {
-  default = false
-}
-variable "gameserver_maxport" {
-  default = 8000
-}
-variable "gameserver_minport" {
-  default = 7000
-}

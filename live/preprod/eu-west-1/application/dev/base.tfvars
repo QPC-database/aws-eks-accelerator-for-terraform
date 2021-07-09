@@ -142,6 +142,7 @@ spot_min_size        = 3
 #          README with instructions available in each HELM module under helm/
 #---------------------------------------------------------#
 # Enable this if worker Node groups has access to internet to download the docker images
+# Or Make it false and set the private contianer image repo url in source/main.tf; currently this defaults to ECR
 public_docker_repo = true
 
 #---------------------------------------------------------#
@@ -164,6 +165,21 @@ lb_ingress_controller_enable = false
 aws_lb_image_tag = "v2.2.1"
 aws_lb_helm_chart_version = "1.2.3" # https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller
 
+#---------------------------------------------------------//
+# ENABLE PROMETHEUS
+#---------------------------------------------------------//
+# Creates the AMP workspace and all the relevent IAM Roles
+aws_managed_prometheus_enable = true
+
+# Deploys Pometheus server with remote write to AWS AMP Workspace
+prometheus_enable = true
+prometheus_helm_chart_version = "14.3.1"
+prometheus_image_tag  = "v2.26.0"
+alert_manager_image_tag = "v0.21.0"
+configmap_reload_image_tag = "v0.5.0"
+node_exporter_image_tag = "v1.1.2"
+pushgateway_image_tag = "v1.3.1"
+
 #---------------------------------------------------------#
 # ENABLE AWS_FLUENT-BIT
 #---------------------------------------------------------#
@@ -175,7 +191,7 @@ aws_lb_helm_chart_version = "1.2.3" # https://artifacthub.io/packages/helm/aws/a
 #---------------------------------------------------------#
 # ENABLE TRAEFIK INGRESS CONTROLLER
 #---------------------------------------------------------#
-//traefik_ingress_controller_enable = true
+traefik_ingress_controller_enable = true
 //traefik_ingress_image_tag = ""
 //traefik_ingress_helm_chart_version = ""
 

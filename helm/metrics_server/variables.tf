@@ -16,7 +16,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-variable "image_repo_url" {}
+variable "private_container_repo_url" {}
 variable "image_repo_name" {
   default = "k8s.gcr.io/metrics-server/metrics-server"
 }

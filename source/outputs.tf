@@ -16,9 +16,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-output "cluster_endpoint" {
-  description = "Endpoint for EKS control plane."
-  value       = module.eks.cluster_endpoint
+
+output "cluster_oidc_url" {
+  description = "The URL on the EKS cluster OIDC Issuer"
+  value       = split("//", module.eks.cluster_oidc_issuer_url)[1]
+}
+
+output "oidc_provider_arn" {
+  description = "The ARN of the OIDC Provider if `enable_irsa = true`."
+  value       = module.eks.oidc_provider_arn
 }
 
 output "cluster_name" {
@@ -31,3 +37,10 @@ output "configure_kubectl" {
   value       = "aws eks --region ${data.aws_region.current.id} update-kubeconfig --name ${module.eks.cluster_id}"
 }
 
+output "amp_work_id" {
+  value = module.aws_managed_prometheus[0].amp_workspace_id
+}
+
+output "amp_work_arn" {
+  value = module.aws_managed_prometheus[0].service_account_amp_ingest_role_arn
+}
